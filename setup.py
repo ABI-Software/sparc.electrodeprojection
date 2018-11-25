@@ -36,6 +36,8 @@ readme = readfile("README.rst", split=True)
 # For requirements not hosted on PyPi place listings
 # into the 'requirements.txt' file.
 requires = [   # minimal requirements listing
+    'numpy',
+    'opencmiss.zinc',
 ]
 source_license = readfile("LICENSE")
 
