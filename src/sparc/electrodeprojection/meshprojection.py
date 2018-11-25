@@ -1,5 +1,5 @@
 """
-Created on 30 MOct, 2018 from mapclientplugins.meshgeneratorstep.
+Created on 30 Oct, 2018 from mapclientplugins.meshgeneratorstep.
 
 @author: Jesse Khorasanee
 """
@@ -18,7 +18,7 @@ class MeshProjection(object):
         self._scene = self._region.getScene()
         # self._child_region = region.createChild('grid_plane')
         self._starting_number = 1000
-        self._global_coords = []
+        self._global_coordinates = []
         self._plane_norm = None
         self._xi_coordinates = {
             'element': [],
@@ -87,12 +87,12 @@ class MeshProjection(object):
         coordinates = fm.findFieldByName('coordinates')
         coordinates = coordinates.castFiniteElement()
         nodes = fm.findNodesetByFieldDomainType(Field.DOMAIN_TYPE_NODES)
-        nodetemplate = nodes.createNodetemplate()
-        nodetemplate.defineField(coordinates)
-        nodetemplate.setValueNumberOfVersions(coordinates, -1, Node.VALUE_LABEL_VALUE, 1)
+        node_template = nodes.createNodetemplate()
+        node_template.defineField(coordinates)
+        node_template.setValueNumberOfVersions(coordinates, -1, Node.VALUE_LABEL_VALUE, 1)
 
         for i, grid_point in enumerate(grid_list):
-            eeg_node = nodes.createNode(self._starting_number + i, nodetemplate)
+            eeg_node = nodes.createNode(self._starting_number + i, node_template)
             cache.setNode(eeg_node)
             coordinates.setNodeParameters(cache, -1, Node.VALUE_LABEL_VALUE, 1, grid_point)
 
@@ -109,27 +109,27 @@ class MeshProjection(object):
         node_points.setMaterial(material_module.findMaterialByName('blue'))
         node_points.setVisibilityFlag(True)
 
-        nodePointAttr = node_points.getGraphicspointattributes()
-        nodePointAttr.setGlyphShapeType(Glyph.SHAPE_TYPE_SPHERE)
-        nodePointAttr.setBaseSize([.02, .02, .02])
+        node_point_attr = node_points.getGraphicspointattributes()
+        node_point_attr.setGlyphShapeType(Glyph.SHAPE_TYPE_SPHERE)
+        node_point_attr.setBaseSize([.02, .02, .02])
         cmiss_number = fm.findFieldByName('cmiss_number')
-        nodePointAttr.setLabelField(cmiss_number)
+        node_point_attr.setLabelField(cmiss_number)
 
         self._scene.endChange()
 
     def solve_nodes(self):
         fm = self._region.getFieldmodule()
         cache = fm.createFieldcache()
-        self._global_coords = []
+        self._global_coordinates = []
         self._xi_coordinates = {
             'element': [],
             'coordinates': [],
             'elementID': []
         }
-        for i in range(0,64):
-            self.moveNode(self._starting_number + i, plane_normal=self._plane_norm, cache=cache)
+        for i in range(0, 64):
+            self.move_node(self._starting_number + i, plane_normal=self._plane_norm, cache=cache)
 
-    def move_node(self, node_key, plane_normal=[0, 1, 0], cache=None):
+    def move_node(self, node_key, plane_normal=None, cache=None):
         # moveNode uses dot products combined with opencmiss' evaluateMeshLocation function
         # to solve where a point lies along a given normal (line in 3D).
 
@@ -151,7 +151,10 @@ class MeshProjection(object):
         tol = .001
         plane_normal_offset = 0
 
-        # Re-aquire openzinc variables
+        if plane_normal is None:
+            plane_normal = [0, 1, 0]
+
+        # Re-acquire opencmiss.zinc variables
         fm = self._region.getFieldmodule()
         coordinates = fm.findFieldByName('coordinates')
         coordinates = coordinates.castFiniteElement()
@@ -214,7 +217,7 @@ class MeshProjection(object):
         self._xi_coordinates['element'].append(el)
         self._xi_coordinates['elementID'].append(el.getIdentifier())
         self._xi_coordinates['coordinates'].append(coordinates)
-        self._global_coords.append(new_coordinates)
+        self._global_coordinates.append(new_coordinates)
 
 
 MeshProjection.moveNode = MeshProjection.move_node
