@@ -44,7 +44,7 @@ source_license = readfile("LICENSE")
 
 setup(
     name='sparc.electrodeprojection',
-    version=find_version("src", "sparc", "ectrodeprojection", "__init__.py"),
+    version=find_version("src", "sparc", "electrodeprojection", "__init__.py"),
     description='',
     long_description='\n'.join(readme) + source_license,
     classifiers=[
