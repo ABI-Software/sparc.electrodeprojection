@@ -84,8 +84,6 @@ class MeshProjection(object):
         node_point_attr = node_points.getGraphicspointattributes()
         node_point_attr.setGlyphShapeType(Glyph.SHAPE_TYPE_SPHERE)
         node_point_attr.setBaseSize([.02, .02, .02])
-        cmiss_number = field_module.findFieldByName('cmiss_number')
-        # node_point_attr.setLabelField(cmiss_number)
 
         node_points = self._scene.createGraphicsPoints()
         node_points.setFieldDomainType(Field.DOMAIN_TYPE_DATAPOINTS)
@@ -150,13 +148,13 @@ class MeshProjection(object):
         field_cache = field_module.createFieldcache()
         field_cache.setTime(self._time)
 
-        found_element, xi_location = field_find_mesh_location.evaluateMeshLocation(field_cache, 3)
+        found_element, xi_location = field_find_mesh_location.evaluateMeshLocation(field_cache, 2)
         location = self._get_coordinates(found_element, xi_location)
         self._create_data_point(location)
 
         field_module.endChange()
 
-        return [found_element.getIdentifier(), xi_location]
+        return [found_element, xi_location]
 
     def clear_projected_points(self):
         field_module = self._region.getFieldmodule()
