@@ -411,7 +411,7 @@ class MeshProjection(object):
             # Break in case we can not converge
             it += 1
             if it > max_iterations:
-                print('Could not converge on node {data_point.getIdentifier()}')
+                print('Could not converge on node {0}'.format(data_point.getIdentifier()))
                 break
 
         # print(f'Node {node_key} was solved in {it-1} iterations')
