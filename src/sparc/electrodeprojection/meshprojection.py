@@ -396,7 +396,6 @@ class MeshProjection(object):
 
             # Find nearest mesh location using the evaluateMeshLocation function
             [el, xi_coordinates] = found_mesh_location.evaluateMeshLocation(cache, 3)
-            print(el.getIdentifier(), xi_coordinates)
             cache.setMeshLocation(el, xi_coordinates)
             [_, mesh_coordinates] = coordinates_field.evaluateReal(cache, 3)
 
@@ -412,7 +411,7 @@ class MeshProjection(object):
             # Break in case we can not converge
             it += 1
             if it > max_iterations:
-                print(f'Could not converge on node {data_point.getIdentifier()}')
+                print('Could not converge on node {0}'.format(data_point.getIdentifier()))
                 break
 
         # print(f'Node {node_key} was solved in {it-1} iterations')
